@@ -50,33 +50,19 @@ class Peleador
     private $peso;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $victorias;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $empates;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $derrotas;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Combate::class, mappedBy="peleador1")
-     */
-    private $combatesPeleador1;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Division::class, inversedBy="campeon")
      */
     private $division;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="Ganador")
+     */
+    private $combatesGanados;
+
     public function __construct()
     {
         $this->combates = new ArrayCollection();
+        $this->combatesGanados = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,69 +142,6 @@ class Peleador
         return $this;
     }
 
-    public function getVictorias(): ?string
-    {
-        return $this->victorias;
-    }
-
-    public function setVictorias(string $victorias): self
-    {
-        $this->victorias = $victorias;
-
-        return $this;
-    }
-
-    public function getEmpates(): ?string
-    {
-        return $this->empates;
-    }
-
-    public function setEmpates(string $empates): self
-    {
-        $this->empates = $empates;
-
-        return $this;
-    }
-
-    public function getDerrotas(): ?string
-    {
-        return $this->derrotas;
-    }
-
-    public function setDerrotas(string $derrotas): self
-    {
-        $this->derrotas = $derrotas;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Combate>
-     */
-    public function getCombatesPeleador1(): Collection
-    {
-        return $this->combates;
-    }
-
-    public function addCombatePeleador1(Combate $combate): self
-    {
-        if (!$this->combates->contains($combate)) {
-            $this->combates[] = $combate;
-            $combate->addPeleador1($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCombatePeleador1(Combate $combate): self
-    {
-        if ($this->combates->removeElement($combate)) {
-            $combate->removePeleador1($this);
-        }
-
-        return $this;
-    }
-
     public function getDivision(): ?Division
     {
         return $this->division;
@@ -227,6 +150,36 @@ class Peleador
     public function setDivision(?Division $division): self
     {
         $this->division = $division;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Combate>
+     */
+    public function getCombatesGanados(): Collection
+    {
+        return $this->combatesGanados;
+    }
+
+    public function addCombatesGanado(Combate $combatesGanado): self
+    {
+        if (!$this->combatesGanados->contains($combatesGanado)) {
+            $this->combatesGanados[] = $combatesGanado;
+            $combatesGanado->setGanador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCombatesGanado(Combate $combatesGanado): self
+    {
+        if ($this->combatesGanados->removeElement($combatesGanado)) {
+            // set the owning side to null (unless already changed)
+            if ($combatesGanado->getGanador() === $this) {
+                $combatesGanado->setGanador(null);
+            }
+        }
 
         return $this;
     }

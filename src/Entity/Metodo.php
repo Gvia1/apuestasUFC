@@ -29,7 +29,6 @@ class Metodo
      */
     private $metodoEspecificos;
 
-
     public function __construct()
     {
         $this->metodoEspecificos = new ArrayCollection();

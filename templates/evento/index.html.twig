@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evento index{% endblock %}
+
+{% block body %}
+    <div class="container">
+     <h2 class="text-light">Eventos</h2><br>
+        <div class="row">
+            {% for evento in eventos %}
+            <div class="col-lg-4 col-md-3 ">
+                <div class="product__sidebar">
+                    <div class="product__sidebar__view">
+                        <div class="filter__gallery">
+                            <div class="product__sidebar__view__item set-bg">
+                                <a href="{{ path('app_evento_combates', {'id': evento.id }) }}"><img src="../{{evento.imagen}}"></a>
+                                <div class="ep">
+                                    {{evento.fecha|date("d/m/Y")}}
+                                </div>
+                                <div class="view">
+                                Nº Combates
+                                    <i class="fa fa-profile"></i>{{evento.combates|length}}
+                                </div>
+                                <h5><a href="#">{{evento.nombre}}</a></h5>
+                            </div>
+                            {% for combate in evento.combates %}
+                            <ul class="list-unstyled">
+                                <li class="text-light">{{combate.peleador1.alias}} VS {{combate.peleador2.alias}}</li>
+                            </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Combate{% endblock %}
+
+{% block body %}
+    <h1>Combate</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ combate.id }}</td>
+            </tr>
+            <tr>
+                <th>Peleador1</th>
+                <td>{{ combate.peleador1 }}</td>
+            </tr>
+            <tr>
+                <th>Peleador2</th>
+                <td>{{ combate.peleador2 }}</td>
+            </tr>
+            <tr>
+                <th>Division</th>
+                <td>{{ combate.division }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_combate_index') }}">back to list</a>
+
+    <a href="{{ path('app_combate_edit', {'id': combate.id}) }}">edit</a>
+
+    {{ include('combate/_delete_form.html.twig') }}
+{% endblock %}

@@ -62,5 +62,4 @@ class MetodoEspecifico
 
         return $this;
     }
-
 }

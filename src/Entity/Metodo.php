@@ -54,7 +54,7 @@ class Metodo
     /**
      * @return Collection<int, MetodoEspecifico>
      */
-    public function getMetodoEspecificos(): Collection
+    public function getMetodoEspecifico(): Collection
     {
         return $this->metodoEspecificos;
     }

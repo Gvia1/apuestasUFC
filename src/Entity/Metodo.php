@@ -29,15 +29,10 @@ class Metodo
      */
     private $metodoEspecificos;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Resultado::class, mappedBy="metodo")
-     */
-    private $resultados;
 
     public function __construct()
     {
         $this->metodoEspecificos = new ArrayCollection();
-        $this->resultados = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,11 +82,4 @@ class Metodo
         return $this;
     }
 
-    /**
-     * @return Collection<int, Resultado>
-     */
-    public function getMetodoEspecifico(): Collection
-    {
-        return $this->metodoEspecifico;
-    }
 }

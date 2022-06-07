@@ -36,7 +36,7 @@ class Combate
     private $division;
 
     /**
-     * @ORM\ManyToOne(targetEntity=evento::class, inversedBy="combates")
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="combates")
      */
     private $evento;
 

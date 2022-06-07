@@ -55,7 +55,12 @@ class Peleador
     private $division;
 
     /**
-     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="Ganador")
+     * @ORM\ManyToMany(targetEntity=Combate::class, mappedBy="peleadores")
+     */
+    private $combates;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="ganador")
      */
     private $combatesGanados;
 
@@ -150,6 +155,33 @@ class Peleador
     public function setDivision(?Division $division): self
     {
         $this->division = $division;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Combate>
+     */
+    public function getCombates(): Collection
+    {
+        return $this->combates;
+    }
+
+    public function addCombate(Combate $combate): self
+    {
+        if (!$this->combates->contains($combate)) {
+            $this->combates[] = $combate;
+            $combate->addPeleadore($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCombate(Combate $combate): self
+    {
+        if ($this->combates->removeElement($combate)) {
+            $combate->removePeleadore($this);
+        }
 
         return $this;
     }

@@ -35,21 +35,15 @@ class Combate
     private $evento;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Peleador::class, inversedBy="combatesGanados")
+     * @ORM\ManyToMany(targetEntity=Peleador::class, inversedBy="combates")
      */
-    private $Ganador;
+    private $peleadores;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Peleador::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=peleador::class, inversedBy="combatesGanados")
      */
-    private $peleador2;
+    private $ganador;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Peleador::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $peleador1;
 
     public function __construct()
     {
@@ -97,39 +91,41 @@ class Combate
         return $this;
     }
 
-    public function getGanador(): ?Peleador
+    /**
+     * @return Collection<int, Peleador>
+     */
+    public function getPeleadores(): Collection
     {
-        return $this->Ganador;
+        return $this->peleadores;
     }
 
-    public function setGanador(?Peleador $Ganador): self
+    public function addPeleadore(Peleador $peleadore): self
     {
-        $this->Ganador = $Ganador;
+        if (!$this->peleadores->contains($peleadore)) {
+            $this->peleadores[] = $peleadore;
+        }
 
         return $this;
     }
 
-    public function getPeleador1(): ?Peleador
+    public function removePeleadore(Peleador $peleadore): self
     {
-        return $this->peleador1;
-    }
-
-    public function setPeleador1(?Peleador $peleador1): self
-    {
-        $this->peleador1 = $peleador1;
+        $this->peleadores->removeElement($peleadore);
 
         return $this;
     }
 
-    public function getPeleador2(): ?Peleador
+    public function getGanador(): ?peleador
     {
-        return $this->peleador2;
+        return $this->ganador;
     }
 
-    public function setPeleador2(?Peleador $peleador2): self
+    public function setGanador(?peleador $ganador): self
     {
-        $this->peleador2 = $peleador2;
+        $this->ganador = $ganador;
 
         return $this;
     }
+
+
 }

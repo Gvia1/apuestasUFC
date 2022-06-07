@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apuesta index{% endblock %}
+
+{% block body %}
+    <h1>Apuesta index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Combate</th>
+                <th>Ganador</th>
+                <th>Metodo</th>
+                <th>Round</th>
+                <th>MetodoEspecifico</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for apuestum in apuestas %}
+            <tr>
+                <td>{{ apuestum.id }}</td>
+                <td>{{ apuestum.combate }}</td>
+                <td>{{ apuestum.ganador }}</td>
+                <td>{{ apuestum.metodo }}</td>
+                <td>{{ apuestum.round }}</td>
+                <td>{{ apuestum.metodoEspecifico }}</td>
+                <td>
+                    <a href="{{ path('app_apuesta_show', {'id': apuestum.id}) }}">show</a>
+                    <a href="{{ path('app_apuesta_edit', {'id': apuestum.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_apuesta_new') }}">Create new</a>
+{% endblock %}

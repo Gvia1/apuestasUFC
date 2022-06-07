@@ -20,12 +20,6 @@ class Combate
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Peleador::class, inversedBy="combates")
-     */
-    private $peleador1;
-
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $rounds;
@@ -36,9 +30,26 @@ class Combate
     private $division;
 
     /**
-     * @ORM\ManyToOne(targetEntity=evento::class, inversedBy="combates")
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="combates")
      */
     private $evento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Peleador::class, inversedBy="combatesGanados")
+     */
+    private $Ganador;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Peleador::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $peleador2;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Peleador::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $peleador1;
 
     public function __construct()
     {
@@ -48,54 +59,6 @@ class Combate
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, Peleador>
-     */
-    public function getPeleadores(): Collection
-    {
-        return $this->peleador1;
-    }
-
-    public function addPeleador1(Peleador $peleador1): self
-    {
-        if (!$this->peleador1->contains($peleador1)) {
-            $this->peleador1[] = $peleador1;
-        }
-
-        return $this;
-    }
-
-    public function removePeleador1(Peleador $peleador1): self
-    {
-        $this->peleador1->removeElement($peleador1);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Peleador>
-     */
-    public function getPeleador2(): Collection
-    {
-        return $this->peleador2;
-    }
-
-    public function addPeleador2(Peleador $peleador2): self
-    {
-        if (!$this->peleador2->contains($peleador2)) {
-            $this->peleador2[] = $peleador2;
-        }
-
-        return $this;
-    }
-
-    public function removePeleador2(Peleador $peleador2): self
-    {
-        $this->peleador2->removeElement($peleador2);
-
-        return $this;
     }
 
     public function getRounds(): ?string
@@ -130,6 +93,42 @@ class Combate
     public function setEvento(?evento $evento): self
     {
         $this->evento = $evento;
+
+        return $this;
+    }
+
+    public function getGanador(): ?Peleador
+    {
+        return $this->Ganador;
+    }
+
+    public function setGanador(?Peleador $Ganador): self
+    {
+        $this->Ganador = $Ganador;
+
+        return $this;
+    }
+
+    public function getPeleador1(): ?Peleador
+    {
+        return $this->peleador1;
+    }
+
+    public function setPeleador1(?Peleador $peleador1): self
+    {
+        $this->peleador1 = $peleador1;
+
+        return $this;
+    }
+
+    public function getPeleador2(): ?Peleador
+    {
+        return $this->peleador2;
+    }
+
+    public function setPeleador2(?Peleador $peleador2): self
+    {
+        $this->peleador2 = $peleador2;
 
         return $this;
     }

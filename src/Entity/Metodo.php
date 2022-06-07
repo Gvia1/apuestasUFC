@@ -29,11 +29,6 @@ class Metodo
      */
     private $metodoEspecificos;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Resultado::class, mappedBy="metodo")
-     */
-    private $resultados;
-
     public function __construct()
     {
         $this->metodoEspecificos = new ArrayCollection();

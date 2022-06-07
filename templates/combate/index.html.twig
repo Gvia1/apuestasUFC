@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Combate index{% endblock %}
+
+{% block body %}
+    <h1>Combate index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Peleador1</th>
+                <th>Peleador2</th>
+                <th>Division</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for combate in combates %}
+            <tr>
+                <td>{{ combate.id }}</td>
+                <td>{{ combate.peleador1 }}</td>
+                <td>{{ combate.peleador2 }}</td>
+                <td>{{ combate.division }}</td>
+                <td>
+                    <a href="{{ path('app_combate_show', {'id': combate.id}) }}">show</a>
+                    <a href="{{ path('app_combate_edit', {'id': combate.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_combate_new') }}">Create new</a>
+{% endblock %}

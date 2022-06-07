@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apuesta{% endblock %}
+
+{% block body %}
+    <h1>Apuesta</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ apuestum.id }}</td>
+            </tr>
+            <tr>
+                <th>Combate</th>
+                <td>{{ apuestum.combate }}</td>
+            </tr>
+            <tr>
+                <th>Ganador</th>
+                <td>{{ apuestum.ganador }}</td>
+            </tr>
+            <tr>
+                <th>Metodo</th>
+                <td>{{ apuestum.metodo }}</td>
+            </tr>
+            <tr>
+                <th>Round</th>
+                <td>{{ apuestum.round }}</td>
+            </tr>
+            <tr>
+                <th>MetodoEspecifico</th>
+                <td>{{ apuestum.metodoEspecifico }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_apuesta_index') }}">back to list</a>
+
+    <a href="{{ path('app_apuesta_edit', {'id': apuestum.id}) }}">edit</a>
+
+    {{ include('apuesta/_delete_form.html.twig') }}
+{% endblock %}

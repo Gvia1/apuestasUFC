@@ -18,7 +18,7 @@ class Apuesta
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="apuestas")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="apuestas")
      */
     private $usuario;
 

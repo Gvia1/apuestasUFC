@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Combate{% endblock %}
+
+{% block body %}
+    <h1>Create new Combate</h1>
+
+    {{ include('combate/_form.html.twig') }}
+
+    <a href="{{ path('app_combate_index') }}">back to list</a>
+{% endblock %}

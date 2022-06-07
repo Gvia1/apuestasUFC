@@ -29,11 +29,6 @@ class MetodoEspecifico
      */
     private $metodo;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Resultado::class, mappedBy="metodoEspecifico")
-     */
-    private $resultados;
-
     public function __construct()
     {
         $this->resultados = new ArrayCollection();
@@ -64,36 +59,6 @@ class MetodoEspecifico
     public function setMetodo(?Metodo $metodo): self
     {
         $this->metodo = $metodo;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Resultado>
-     */
-    public function getResultados(): Collection
-    {
-        return $this->resultados;
-    }
-
-    public function addResultado(Resultado $resultado): self
-    {
-        if (!$this->resultados->contains($resultado)) {
-            $this->resultados[] = $resultado;
-            $resultado->setMetodoEspecifico($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResultado(Resultado $resultado): self
-    {
-        if ($this->resultados->removeElement($resultado)) {
-            // set the owning side to null (unless already changed)
-            if ($resultado->getMetodoEspecifico() === $this) {
-                $resultado->setMetodoEspecifico(null);
-            }
-        }
 
         return $this;
     }

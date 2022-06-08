@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Combate;
+use App\Entity\CombatePeleador;
 use App\Entity\Evento;
 use App\Form\EventoType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,15 +26,6 @@ class EventoController extends AbstractController
             ->getRepository(Evento::class)
             ->findAll();
         
-        // foreach($eventos as $evento)
-        // {
-        //     $combates = $evento->getCombates();
-        //     foreach($combates as $combate)
-        //     {
-        //         dump($combate->getPeleadores());die();
-        //     }
-        // }
-            
         return $this->render('evento/index.html.twig', [
             'eventos' => $eventos,
         ]);
@@ -108,7 +101,9 @@ class EventoController extends AbstractController
      */
     public function eventoCombates(EntityManagerInterface $entityManager, Evento $evento): Response
     {
-        $combates = $evento->getCombates();
+        $combates=$entityManager->getRepository(Combate::class)->findByEvento($evento->getID());
+        dump($combates[0]->getPeleadores());die();
+        
         return $this->render('evento/combates.html.twig', [
             'combates' => $combates,
             'evento' => $evento

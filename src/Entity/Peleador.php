@@ -55,19 +55,36 @@ class Peleador
     private $division;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Combate::class, mappedBy="peleadores")
+     * @ORM\OneToMany(targetEntity=CombatePeleador::class, mappedBy="peleador", orphanRemoval=true)
      */
     private $combates;
 
     /**
-     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="ganador")
+     * @ORM\OneToMany(targetEntity=Apuesta::class, mappedBy="ganador")
      */
-    private $combatesGanados;
+    private $apuestas;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $victorias;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $derrotas;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $empates;
+
 
     public function __construct()
     {
         $this->combates = new ArrayCollection();
         $this->combatesGanados = new ArrayCollection();
+        $this->apuestas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,59 +177,99 @@ class Peleador
     }
 
     /**
-     * @return Collection<int, Combate>
+     * @return Collection<int, CombatePeleador>
      */
     public function getCombates(): Collection
     {
         return $this->combates;
     }
 
-    public function addCombate(Combate $combate): self
+    public function addCombate(CombatePeleador $combate): self
     {
         if (!$this->combates->contains($combate)) {
             $this->combates[] = $combate;
-            $combate->addPeleadore($this);
+            $combate->setPeleador($this);
         }
 
         return $this;
     }
 
-    public function removeCombate(Combate $combate): self
+    public function removeCombate(CombatePeleador $combate): self
     {
         if ($this->combates->removeElement($combate)) {
-            $combate->removePeleadore($this);
+            // set the owning side to null (unless already changed)
+            if ($combate->getPeleador() === $this) {
+                $combate->setPeleador(null);
+            }
         }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Combate>
+     * @return Collection<int, Apuesta>
      */
-    public function getCombatesGanados(): Collection
+    public function getApuestas(): Collection
     {
-        return $this->combatesGanados;
+        return $this->apuestas;
     }
 
-    public function addCombatesGanado(Combate $combatesGanado): self
+    public function addApuesta(Apuesta $apuesta): self
     {
-        if (!$this->combatesGanados->contains($combatesGanado)) {
-            $this->combatesGanados[] = $combatesGanado;
-            $combatesGanado->setGanador($this);
+        if (!$this->apuestas->contains($apuesta)) {
+            $this->apuestas[] = $apuesta;
+            $apuesta->setGanador($this);
         }
 
         return $this;
     }
 
-    public function removeCombatesGanado(Combate $combatesGanado): self
+    public function removeApuesta(Apuesta $apuesta): self
     {
-        if ($this->combatesGanados->removeElement($combatesGanado)) {
+        if ($this->apuestas->removeElement($apuesta)) {
             // set the owning side to null (unless already changed)
-            if ($combatesGanado->getGanador() === $this) {
-                $combatesGanado->setGanador(null);
+            if ($apuesta->getGanador() === $this) {
+                $apuesta->setGanador(null);
             }
         }
 
         return $this;
     }
+
+    public function getVictorias(): ?string
+    {
+        return $this->victorias;
+    }
+
+    public function setVictorias(string $victorias): self
+    {
+        $this->victorias = $victorias;
+
+        return $this;
+    }
+
+    public function getDerrotas(): ?string
+    {
+        return $this->derrotas;
+    }
+
+    public function setDerrotas(?string $derrotas): self
+    {
+        $this->derrotas = $derrotas;
+
+        return $this;
+    }
+
+    public function getEmpates(): ?string
+    {
+        return $this->empates;
+    }
+
+    public function setEmpates(?string $empates): self
+    {
+        $this->empates = $empates;
+
+        return $this;
+    }
+
 }

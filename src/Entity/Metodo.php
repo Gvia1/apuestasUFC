@@ -29,9 +29,21 @@ class Metodo
      */
     private $metodoEspecificos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CombatePeleador::class, mappedBy="metodo")
+     */
+    private $combatesGanados;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Apuesta::class, mappedBy="metodo")
+     */
+    private $apuestas;
+
     public function __construct()
     {
         $this->metodoEspecificos = new ArrayCollection();
+        $this->combatesGanados = new ArrayCollection();
+        $this->apuestas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,6 +87,66 @@ class Metodo
             // set the owning side to null (unless already changed)
             if ($metodoEspecifico->getMetodo() === $this) {
                 $metodoEspecifico->setMetodo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CombatePeleador>
+     */
+    public function getCombatesGanados(): Collection
+    {
+        return $this->combatesGanados;
+    }
+
+    public function addCombatesGanado(CombatePeleador $combatesGanado): self
+    {
+        if (!$this->combatesGanados->contains($combatesGanado)) {
+            $this->combatesGanados[] = $combatesGanado;
+            $combatesGanado->setMetodo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCombatesGanado(CombatePeleador $combatesGanado): self
+    {
+        if ($this->combatesGanados->removeElement($combatesGanado)) {
+            // set the owning side to null (unless already changed)
+            if ($combatesGanado->getMetodo() === $this) {
+                $combatesGanado->setMetodo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Apuesta>
+     */
+    public function getApuestas(): Collection
+    {
+        return $this->apuestas;
+    }
+
+    public function addApuesta(Apuesta $apuesta): self
+    {
+        if (!$this->apuestas->contains($apuesta)) {
+            $this->apuestas[] = $apuesta;
+            $apuesta->setMetodo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApuesta(Apuesta $apuesta): self
+    {
+        if ($this->apuestas->removeElement($apuesta)) {
+            // set the owning side to null (unless already changed)
+            if ($apuesta->getMetodo() === $this) {
+                $apuesta->setMetodo(null);
             }
         }
 

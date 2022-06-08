@@ -20,13 +20,8 @@
                                 Nº Combates
                                     <i class="fa fa-profile"></i>{{evento.combates|length}}
                                 </div>
-                                <h5><a href="#">{{evento.nombre}}</a></h5>
                             </div>
-                            {% for combate in evento.combates %}
-                            <ul class="list-unstyled">
-                                <li class="text-light">{{combate.peleador1.alias}} VS {{combate.peleador2.alias}}</li>
-                            </ul>
-                            {% endfor %}
+                                <h5 class ="text-white">{{evento.nombre}}</h5>
                         </div>
                     </div>
                 </div>

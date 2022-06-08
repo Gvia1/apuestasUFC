@@ -35,14 +35,9 @@ class Combate
     private $evento;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Peleador::class, inversedBy="combates")
+     * @ORM\OneToMany(targetEntity=CombatePeleador::class, mappedBy="combate", orphanRemoval=true)
      */
     private $peleadores;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=peleador::class, inversedBy="combatesGanados")
-     */
-    private $ganador;
 
 
     public function __construct()
@@ -92,40 +87,33 @@ class Combate
     }
 
     /**
-     * @return Collection<int, Peleador>
+     * @return Collection<int, CombatePeleador>
      */
     public function getPeleadores(): Collection
     {
         return $this->peleadores;
     }
 
-    public function addPeleadore(Peleador $peleadore): self
+    public function addPeleadores(CombatePeleador $peleadores): self
     {
-        if (!$this->peleadores->contains($peleadore)) {
-            $this->peleadores[] = $peleadore;
+        if (!$this->peleadores->contains($peleadores)) {
+            $this->peleadores[] = $peleadores;
+            $peleadores->setCombate($this);
         }
 
         return $this;
     }
 
-    public function removePeleadore(Peleador $peleadore): self
+    public function removePeleadore(CombatePeleador $peleadores): self
     {
-        $this->peleadores->removeElement($peleadore);
+        if ($this->peleadores->removeElement($peleadores)) {
+            // set the owning side to null (unless already changed)
+            if ($peleadores->getCombate() === $this) {
+                $peleadores->setCombate(null);
+            }
+        }
 
         return $this;
     }
-
-    public function getGanador(): ?peleador
-    {
-        return $this->ganador;
-    }
-
-    public function setGanador(?peleador $ganador): self
-    {
-        $this->ganador = $ganador;
-
-        return $this;
-    }
-
 
 }

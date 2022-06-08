@@ -24,6 +24,15 @@ class EventoController extends AbstractController
             ->getRepository(Evento::class)
             ->findAll();
         
+        // foreach($eventos as $evento)
+        // {
+        //     $combates = $evento->getCombates();
+        //     foreach($combates as $combate)
+        //     {
+        //         dump($combate->getPeleadores());die();
+        //     }
+        // }
+            
         return $this->render('evento/index.html.twig', [
             'eventos' => $eventos,
         ]);

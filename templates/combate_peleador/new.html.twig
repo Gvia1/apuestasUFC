@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CombatePeleador{% endblock %}
+
+{% block body %}
+    <h1>Create new CombatePeleador</h1>
+
+    {{ include('combate_peleador/_form.html.twig') }}
+
+    <a href="{{ path('app_combate_peleador_index') }}">back to list</a>
+{% endblock %}

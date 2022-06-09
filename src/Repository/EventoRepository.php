@@ -39,6 +39,15 @@ class EventoRepository extends ServiceEntityRepository
         }
     }
 
+    public function findUltimosEventos(){
+        $qb=$this->createQueryBuilder('e');
+        $qb->select('e')
+        ->orderBy('e.id','DESC')
+        ->setMaxResults(3)
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Evento[] Returns an array of Evento objects
 //     */

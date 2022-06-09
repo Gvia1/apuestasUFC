@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CombatePeleador{% endblock %}
+
+{% block body %}
+    <h1>Edit CombatePeleador</h1>
+
+    {{ include('combate_peleador/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_combate_peleador_index') }}">back to list</a>
+
+    {{ include('combate_peleador/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CombatePeleador{% endblock %}
+
+{% block body %}
+    <h1>CombatePeleador</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ combate_peleador.id }}</td>
+            </tr>
+            <tr>
+                <th>Ganador</th>
+                <td>{{ combate_peleador.ganador ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Round</th>
+                <td>{{ combate_peleador.round }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_combate_peleador_index') }}">back to list</a>
+
+    <a href="{{ path('app_combate_peleador_edit', {'id': combate_peleador.id}) }}">edit</a>
+
+    {{ include('combate_peleador/_delete_form.html.twig') }}
+{% endblock %}

@@ -101,8 +101,7 @@ class EventoController extends AbstractController
      */
     public function eventoCombates(EntityManagerInterface $entityManager, Evento $evento): Response
     {
-        $combates=$entityManager->getRepository(Combate::class)->findByEvento($evento->getID());
-        dump($combates[0]->getPeleadores());die();
+        $combates=$evento->getCombates();
         
         return $this->render('evento/combates.html.twig', [
             'combates' => $combates,

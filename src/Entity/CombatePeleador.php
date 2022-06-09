@@ -18,7 +18,7 @@ class CombatePeleador
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=peleador::class, inversedBy="combates")
+     * @ORM\ManyToOne(targetEntity=Peleador::class, inversedBy="combates")
      * @ORM\JoinColumn(nullable=false)
      */
     private $peleador;

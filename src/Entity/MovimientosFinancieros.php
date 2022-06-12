@@ -28,10 +28,10 @@ class MovimientosFinancieros
     private $Concepto;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="movimientosFinancieros")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="movimientos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Usuario;
+    private $usuario;
 
     public function getId(): ?int
     {
@@ -64,12 +64,12 @@ class MovimientosFinancieros
 
     public function getUsuario(): ?user
     {
-        return $this->Usuario;
+        return $this->usuario;
     }
 
-    public function setUsuario(?user $Usuario): self
+    public function setUsuario(?user $usuario): self
     {
-        $this->Usuario = $Usuario;
+        $this->usuario = $usuario;
 
         return $this;
     }

@@ -1,4 +1,72 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/evento.jpg' )}}">
+    </section>
+    <br>
+    {{ form_start(form) }}
+    <h2>Crear Evento</h2>
+        <div class="form-row">
+            <div class ="col">
+                <label class="text-white">Nombre</label>
+                {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Localidad</label>
+                {{ form_widget(form.localidad, { 'attr': {'class': 'form-control'}} )}}
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class ="col">
+                <label class="text-white">Fecha</label>
+                {{ form_widget(form.fecha, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class ="col">
+                <label class="text-white">Imagen</label>
+                {{ form_widget(form.imagen, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-2">
+                <button type="submit" class="site-btn">Guardar Cambios</button>
+            </div>
+            <div class="col col-lg-2">
+                <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+            </div>
+            <div class="col col-lg-2">
+        </div>
+    {{ form_end(form, {render_rest: false}) }}
+</div>
+<br>
+<div class='container'>
+    <table class="table bg-light">
+    <thead style="background-color:#e53637">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Localidad</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for evento in eventos %}
+    <tr>
+        <th scope="row">{{evento.id}}</th>
+        <td>{{evento.nombre}}</td>
+        <td>{{evento.localidad}}</td>
+        <td>{{evento.fecha|date("d/m/Y")}}</td>
+        <td>
+            <button type="button" class="btn btn-success"><a class="text-white" href="{{ path('app_evento_edit',{'id':evento.id}) }}">Editar</a></button>
+            <button type="button" class="btn btn-danger"><a class="text-white" href="{{ path('app_evento_delete',{'id':evento.id}) }}">Borrar</a></button>
+            <button type="button" class="btn btn-info"><a class= "text-white"href="{{ path('app_combate_new') }}">Añadir Combate</a></button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>

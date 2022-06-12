@@ -1,0 +1,53 @@
+{{ form_start(form)}}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
+    </section>
+    <br>
+    {{ form_start(form) }}
+        <div class="form-row">
+            <div class="col">
+                <label class="text-white">Nombre</label>
+                {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class ="col">
+            </div>
+            <div class ="col">
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col col-lg-2">
+                <button type="submit" class="site-btn">Guardar Cambios</button>
+            </div>
+            <div class="col col-lg-2">
+                <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+            </div>
+        </br>
+    {{ form_end(form, {render_rest: false}) }}
+</div>
+<br>
+<div class='container'>
+    <table class="table bg-light">
+    <thead style="background-color:#e53637">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for division in divisiones %}
+    <tr>
+        <th scope="row">{{division.id}}</th>
+        <td>{{division.nombre}}</td>
+        <td>
+            <button type="button" class="btn btn-success"><a class="text-white" href="{{ path('app_division_edit',{'id':division.id}) }}">Editar</a></button>
+            <button type="button" class="btn btn-danger"><a class="text-white" href="{{ path('app_division_delete',{'id':division.id}) }}">Borrar</a></button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>

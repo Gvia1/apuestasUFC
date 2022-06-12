@@ -39,6 +39,17 @@ class PeleadorRepository extends ServiceEntityRepository
         }
     }
 
+    public function findPeleadoresCombate($peleadoresId)
+    {
+        $qb=$this->createQueryBuilder('p');
+        $qb->select('p')
+        ->where('p.id IN (:peleadores)')
+        ->setParameter('peleadores', array_values($peleadoresId))
+        ;
+        return $qb->getQuery()->getResult();
+    }
+    
+
 //    /**
 //     * @return Peleador[] Returns an array of Peleador objects
 //     */

@@ -25,7 +25,7 @@ class Peleador
     private $nombre;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $alias;
 
@@ -49,10 +49,6 @@ class Peleador
      */
     private $peso;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Division::class, inversedBy="campeon")
-     */
-    private $division;
 
     /**
      * @ORM\OneToMany(targetEntity=CombatePeleador::class, mappedBy="peleador", orphanRemoval=true)
@@ -78,6 +74,11 @@ class Peleador
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $empates;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Division::class, inversedBy="peleadores")
+     */
+    private $division;
 
 
     public function __construct()
@@ -270,6 +271,10 @@ class Peleador
         $this->empates = $empates;
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->nombre.' "'.$this->alias.'" '.$this->apellido;
     }
 
 }

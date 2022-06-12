@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/contrasena.jpg' )}}">
+    </section>
+        <div class="container">
+        <br>
+        <h3 class="text-white">Cambiar contraseña del usuario: <b>{{user.username}}</b></h3>
+        {% include '_mensajes.html.twig' %}
+        <br>
+            {{ form_start(form) }}
+                <div class="form-row">
+                    <div class ="col">
+                        <label class="text-white">Contraseña Actual</label>
+                        {{ form_widget(form.contrasenaActual, { 'attr': {'class': 'form-control'} } )}}
+                    </div>
+                    <div class ="col">
+                    </div>
+                    <div class ="col">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class ="col">
+                        <label class="text-white">Contraseña nueva</label>
+                        {{ form_widget(form.password.first, { 'attr': {'class': 'form-control'} } )}}
+                    </div>
+                    <div class ="col">
+                        <label class="text-white">Confirmar contraseña</label>
+                        {{ form_widget(form.password.second, { 'attr': {'class': 'form-control'} } )}}
+                    </div>
+                    <div class ="col">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <button type="submit" class="site-btn">Cambiar contraseña</button>
+                    </div>
+                    <div class="col col-lg-2">
+                        <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+                    </div>
+                    <div class="col col-lg-2">
+        {{ form_end(form, {render_rest: false}) }}
+{% endblock %}

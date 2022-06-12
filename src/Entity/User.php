@@ -46,11 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $apuestas;
 
     /**
-     * @ORM\OneToMany(targetEntity=MovimientosFinancieros::class, mappedBy="Usuario", orphanRemoval=true)
-     */
-    private $movimientosFinancieros;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $Nombre;
@@ -100,10 +95,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $numero_cuenta;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MovimientosFinancieros::class, mappedBy="usuario", orphanRemoval=true)
+     */
+    private $movimientos;
+
     public function __construct()
     {
         $this->apuestas = new ArrayCollection();
         $this->movimientosFinancieros = new ArrayCollection();
+        $this->movimientos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -369,4 +370,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, MovimientosFinancieros>
+     */
+    public function getMovimientos(): Collection
+    {
+        return $this->movimientos;
+    }
+
+    public function addMovimiento(MovimientosFinancieros $movimiento): self
+    {
+        if (!$this->movimientos->contains($movimiento)) {
+            $this->movimientos[] = $movimiento;
+            $movimiento->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovimiento(MovimientosFinancieros $movimiento): self
+    {
+        if ($this->movimientos->removeElement($movimiento)) {
+            // set the owning side to null (unless already changed)
+            if ($movimiento->getUsuario() === $this) {
+                $movimiento->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+    public function getSaldo()
+    {
+        $saldo=0;
+        $movimientos=$this->getMovimientos();
+        foreach($movimientos as $movimiento){
+            $saldo+=$movimiento->getImporte();
+        }
+
+        return $saldo;
+    }
+    
 }

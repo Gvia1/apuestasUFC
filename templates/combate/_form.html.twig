@@ -1,4 +1,89 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{{ form_start(form)}}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
+    </section>
+    <br>
+    {{ form_start(form) }}
+        <div class="form-row">
+            <div class="col">
+                <label class="text-white">Evento</label><br>
+                {{ form_widget(form.evento, { 'attr': {'class': 'nice-select'} } )}}
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            {# <div class ="col">
+                <label class="text-white">Nombre</label>
+                {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} } )}}
+            </div> #}
+            <div class ="col">
+                <label class="text-white">Division</label><br>
+                {{ form_widget(form.division, { 'attr': {'class': 'nice-select'} } )}}
+            </div>
+            <div class ="col">
+                <label class="text-white">Rounds</label><br>
+                {{ form_widget(form.rounds, { 'attr': {'class': 'nice-select'}} )}}
+            </div>
+            <div class ="col">
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        {{ form_start(formPeleadores)}}
+        <div class="form-row">
+            <div class ="col">
+                <label class="text-white">Peleador 1</label><br>
+                {{ form_widget(formPeleadores.peleador, { 'attr': {'class': 'nice-select'} } )}}
+            </div>
+            <div class ="col">
+                <label class="text-white">Peleador 2</label><br>
+                {{ form_widget(formPeleadores.peleador2, { 'attr': {'class': 'nice-select'} } )}}
+            </div>
+            <div class ="col">
+            </div>
+            <div class ="col">
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-2">
+                <button type="submit" class="site-btn">Guardar Cambios</button>
+            </div>
+            <div class="col col-lg-2">
+                <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+            </div>
+        </br>
+    {{ form_end(form, {render_rest: false}) }}
+</div>
+<br>
+<div class='container'>
+    <table class="table bg-light">
+    <thead style="background-color:#e53637">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Division</th>
+        <th scope="col">Rounds</th>
+        <th scope="col">Evento</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for combate in combates %}
+    <tr>
+        <th scope="row">{{combate.id}}</th>
+        <td>{{combate.nombre}}</td>
+        <td>{{combate.division.nombre}}</td>
+        <td>{{combate.rounds}}</td>
+        <td>{{combate.evento.nombre}}</td>
+        <td>
+            <button type="button" class="btn btn-success"><a class="text-white" href="{{ path('app_combate_edit',{'id':combate.id}) }}">Editar</a></button>
+            <button type="button" class="btn btn-danger"><a class="text-white" href="{{ path('app_combate_delete',{'id':combate.id}) }}">Borrar</a></button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>

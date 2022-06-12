@@ -3,8 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Combate;
+use App\Entity\CombatePeleador;
+use App\Form\CombatePeleadorType;
 use App\Form\CombateType;
+use App\Repository\CombatePeleadorRepository;
 use App\Repository\CombateRepository;
+use App\Repository\PeleadorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,21 +33,43 @@ class CombateController extends AbstractController
     /**
      * @Route("/new", name="app_combate_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, CombateRepository $combateRepository): Response
+    public function new(Request $request, CombateRepository $combateRepository, CombatePeleadorRepository $combatePeleadorRepository, PeleadorRepository $peleadorRepository, EntityManagerInterface $em): Response
     {
         $combate = new Combate();
         $form = $this->createForm(CombateType::class, $combate);
         $form->handleRequest($request);
+        
+        $formPeleadores=$this->createForm(CombatePeleadorType::class, new CombatePeleador);
+        
+        if ($form->isSubmitted()) {
+            $peleadoresId[]=$request->request->get('combate_peleador');
+            $peleador1=$peleadorRepository->findOneById($peleadoresId[0]['peleador']);
+            $peleador2=$peleadorRepository->findOneById($peleadoresId[0]['peleador2']);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $combateRepository->add($combate, true);
+            $combate->setNombre($peleador1->__toString().' Vs '.$peleador2->__toString());
+            $em->persist($combate);
+            $em->flush();
 
-            return $this->redirectToRoute('app_combate_index', [], Response::HTTP_SEE_OTHER);
+            $combatePeleador=new CombatePeleador;
+            $combatePeleador->setCombate($combate);
+            $combatePeleador->setPeleador($peleador1);
+            $em->persist($combatePeleador);
+            $em->flush();
+
+            $combatePeleador=new CombatePeleador;
+            $combatePeleador->setCombate($combate);
+            $combatePeleador->setPeleador($peleador2);
+            $em->persist($combatePeleador);
+            $em->flush();
+            
+            return $this->redirectToRoute('app_combate_new', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('combate/new.html.twig', [
             'combate' => $combate,
             'form' => $form,
+            'formPeleadores'=> $formPeleadores,
+            'combates' => $combateRepository->findAll(),
         ]);
     }
 
@@ -59,33 +86,53 @@ class CombateController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_combate_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Combate $combate, CombateRepository $combateRepository): Response
+    public function edit(Request $request, Combate $combate, CombateRepository $combateRepository,PeleadorRepository $peleadorRepository, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(CombateType::class, $combate);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $combateRepository->add($combate, true);
+        $formPeleadores=$this->createForm(CombatePeleadorType::class, new CombatePeleador);
 
-            return $this->redirectToRoute('app_combate_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted()) {
+            $peleadoresId[]=$request->request->get('combate_peleador');
+            $peleador1=$peleadorRepository->findOneById($peleadoresId[0]['peleador']);
+            $peleador2=$peleadorRepository->findOneById($peleadoresId[0]['peleador2']);
+
+            $combate->setNombre($peleador1->__toString().' Vs '.$peleador2->__toString());
+            $em->persist($combate);
+            $em->flush();
+
+            $combatePeleador=new CombatePeleador;
+            $combatePeleador->setCombate($combate);
+            $combatePeleador->setPeleador($peleador1);
+            $em->persist($combatePeleador);
+            $em->flush();
+
+            $combatePeleador=new CombatePeleador;
+            $combatePeleador->setCombate($combate);
+            $combatePeleador->setPeleador($peleador2);
+            $em->persist($combatePeleador);
+            $em->flush();
+
+            return $this->redirectToRoute('app_combate_new', ['combates' => $combateRepository->findAll()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('combate/edit.html.twig', [
             'combate' => $combate,
             'form' => $form,
+            'combates' => $combateRepository->findAll(),
+            'formPeleadores'=> $formPeleadores,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="app_combate_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_combate_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, Combate $combate, CombateRepository $combateRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$combate->getId(), $request->request->get('_token'))) {
             $combateRepository->remove($combate, true);
-        }
 
-        return $this->redirectToRoute('app_combate_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_combate_new', ['combates' => $combateRepository->findAll()], Response::HTTP_SEE_OTHER);
     }
 
 }

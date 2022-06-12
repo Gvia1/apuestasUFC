@@ -41,12 +41,13 @@ class CombatePeleador
 
     /**
      * @ORM\ManyToOne(targetEntity=Metodo::class, inversedBy="combatesGanados")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $metodo;
 
     /**
      * @ORM\ManyToOne(targetEntity=MetodoEspecifico::class, inversedBy="combatesGanados")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $metodoEspecifico;
 

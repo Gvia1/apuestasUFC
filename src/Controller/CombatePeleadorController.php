@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/combatesEvento/")
+ * @Route("/combatesPeleador/")
  */
 class CombatePeleadorController extends AbstractController
 {
     /**
-     * @Route("{id}/", name="app_combate_peleador_index", methods={"GET"})
+     * @Route("/", name="app_combate_peleador_index", methods={"GET"})
      */
     public function index(Request $request ,CombatePeleadorRepository $combatePeleadorRepository, CombateRepository $combateRepository, EventoRepository $eventoRepository): Response
     {
@@ -29,7 +29,7 @@ class CombatePeleadorController extends AbstractController
 
         $combates=$combateRepository->findBy(['evento'=> $evento]);
 
-        $peleadores=$combatePeleadorRepository->findPeleadoresCombates($combatesId);
+        $peleadores=$combatePeleadorRepository->findPeleadoresCombates($combates);
 
         return $this->render('combate_peleador/index.html.twig', [
             'peleadores' => $peleadores,
@@ -38,11 +38,13 @@ class CombatePeleadorController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_combate_peleador_new", methods={"GET", "POST"})
+     * @Route("{id}/new", name="app_combate_peleador_new", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
-    public function new(Request $request, CombatePeleadorRepository $combatePeleadorRepository): Response
+    public function new(Request $request, CombatePeleadorRepository $combatePeleadorRepository, Combate $combate): Response
     {
+        
         $combatePeleador = new CombatePeleador();
+        $combatePeleador->setCombate($combate);
         $form = $this->createForm(CombatePeleadorType::class, $combatePeleador);
         $form->handleRequest($request);
 

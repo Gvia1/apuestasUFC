@@ -40,16 +40,17 @@ class EventoController extends AbstractController
         $form = $this->createForm(EventoType::class, $evento);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $entityManager->persist($evento);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_evento_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_evento_new', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('evento/new.html.twig', [
             'evento' => $evento,
             'form' => $form,
+            'eventos' => $entityManager->getRepository(Evento::class)->findAll()
         ]);
     }
 
@@ -80,20 +81,19 @@ class EventoController extends AbstractController
         return $this->renderForm('evento/edit.html.twig', [
             'evento' => $evento,
             'form' => $form,
+            'eventos' => $entityManager->getRepository(Evento::class)->findAll()
         ]);
     }
 
     /**
-     * @Route("/{id}", name="app_evento_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_evento_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, Evento $evento, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$evento->getId(), $request->request->get('_token'))) {
             $entityManager->remove($evento);
             $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('app_evento_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_evento_new', ['eventos' => $entityManager->getRepository(Evento::class)->findAll()], Response::HTTP_SEE_OTHER);
     }
 
     /**

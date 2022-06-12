@@ -1,39 +1,58 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-5 mx-auto">
-        <div id="first">
-            <div class="myform form text-light">
-                <div class="logo mb-3">
-                    <div class="col-md-12 text-center">
-                        <h1 class="text-light">Apuesta</h1>
-                    </div>
-                </div>
-                {{ form_start(form) }}
-                <div class="form-group">
-                    <label>Ganador</label><br>
-                    {{ form_widget(form.ganador)}}
-                </div>
-                <div class="form-group">
-                    <label>Round</label><br>
-                    {{ form_widget(form.round)}}
-                </div>
-                <div class="form-group">
-                    <label>Metodo</label><br>
-                    {{ form_widget(form.metodo)}}
-                </div>
-                <div class="form-group">
-                    <label>Metodo Especifico</label><br>
-                    {{ form_widget(form.metodoEspecifico)}}
-                </div>
-                <div class="form-group">
-                    <label>Cantidad</label><br>
-                    {{ form_widget(form.cantidad)}}
-                </div>
-                {{ form_end(form) }}
-                <div class="col-md-12 text-center ">
-                    <button type="submit" class=" btn btn-block mybtn btn-danger tx-tfm">Apostar!!!</button>
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/apuesta.jpg' )}}">
+    </section>
+    <br>
+    {{ form_start(form)}}
+        <div class="container">
+            <div class="row justify-content-center">
+                <h3 class='text-white'>Ganador</h3>
+            </div>
+            <div class="row justify-content-center">
+                {{ form_widget(form.ganador, { 'attr': {'class': 'nice-select'}} )}}
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <h3 class='text-white'>Round</h3>
+            </div>
+            <div class="row justify-content-center">
+                {{ form_widget(form.round, { 'attr': {'class': 'nice-select'}} )}}
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <h3 class='text-white'>Metodo</h3>
+            </div>
+            <div class="row justify-content-center">
+                {{ form_widget(form.metodo, { 'attr': {'class': 'nice-select'}} )}}
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <h3 class='text-white'>Metodo Especifico</h3>
+            </div>
+            <div class="row justify-content-center">
+                {{ form_widget(form.metodoEspecifico, { 'attr': {'class': 'nice-select'}} )}}
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <h3 class='text-white'>Cantidad(€)</h3>
+            </div>
+            <div class="row justify-content-center">
+                <div class ="col-auto">
+                    {{ form_widget(form.cantidad, { 'attr': {'class': 'form-control'}} )}}
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+            <br>
+            <div class="row justify-content-center">
+                <div class="form-row">
+                    <div class ="col">
+                    </div>
+                    <div class ="col">
+                        <button class="site-btn"><a class= "text-white"href="{{ path('app_apuestas') }}">Ir al Inicio</a></button>
+                    </div>
+                    <div class ="col">
+                        <button type="submit" class="site-btn">Realizar Apuesta</button>
+                    </div>
+                    <div class ="col">
+                    </div>
+                </div>           
+            </div>
+    {{ form_end(form, {render_rest: false}) }}

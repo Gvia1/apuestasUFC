@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Peleador index{% endblock %}
+
+{% block body %}
+    <h1>Peleador index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Alias</th>
+                <th>Apellido</th>
+                <th>Edad</th>
+                <th>Altura</th>
+                <th>Peso</th>
+                <th>Victorias</th>
+                <th>Derrotas</th>
+                <th>Empates</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for peleador in peleadors %}
+            <tr>
+                <td>{{ peleador.id }}</td>
+                <td>{{ peleador.nombre }}</td>
+                <td>{{ peleador.alias }}</td>
+                <td>{{ peleador.apellido }}</td>
+                <td>{{ peleador.edad }}</td>
+                <td>{{ peleador.altura }}</td>
+                <td>{{ peleador.peso }}</td>
+                <td>{{ peleador.victorias }}</td>
+                <td>{{ peleador.derrotas }}</td>
+                <td>{{ peleador.empates }}</td>
+                <td>
+                    <a href="{{ path('app_peleador_show', {'id': peleador.id}) }}">show</a>
+                    <a href="{{ path('app_peleador_edit', {'id': peleador.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_peleador_new') }}">Create new</a>
+{% endblock %}

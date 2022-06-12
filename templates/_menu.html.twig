@@ -13,21 +13,43 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li class="active"><a href="{{ path('app_apuestas')}}">Inicio</a></li>
-                            <li><a href="{{ path('app_evento_index')}}">Eventos<span></span></a>
+                            <li><a href="{{ path('app_evento_index')}}">Eventos<span></span></a></li>
+                            {% if is_granted ('ROLE_ADMIN') %} 
+                                <li style="background-color:#FFD700"><a style="color:black"><b>SuperMenu</b></a>
+                                <ul class="dropdown">
+                                    <li class="text-center"><a href="{{ path('app_evento_new')}}">Gestionar eventos</a></li>
+                                    <li class="text-center"><a href="{{ path('app_combate_new')}}">Gestionar combates</a></li>
+                                    <li class="text-center"><a href="{{ path('app_peleador_new')}}">Gestionar peleadores</a></li>
+                                    <li class="text-center"><a href="{{ path('app_division_new')}}">Gestionar divisiones</a></li>
+                                    <li class="text-center"><a href="{{ path('app_pruebas')}}">Pruebas</a></li>
+                                </ul>
                             </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>
             </div>
             <div class="col-lg-2">
-                <div class="header__right">
-                    <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                    {% if app.user %}
-                            <a href="{{ path('app_user_show',{'id':app.user.userIdentifier})}}"><span class="icon_profile"></span></a>
-                            <a href="{{ path('app_logout') }}"><span >cerrar sesion</span></a>
-                    {% else %}
-                            <a href="{{ path('app_login')}}"><span class="icon_profile"></span></a>
-                    {% endif %}
+                <div class="header__nav">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            {% if app.user %}
+                                {% set saldo = 0 %}
+                                {% for movimiento in app.user.movimientos %}
+                                    {% set saldo = saldo +  movimiento.importe %}
+                                {% endfor %}
+                            <li class="active"><a href="{{ path('app_user_edit',{'id':app.user.id})}}"><span class="icon_profile"></span></a>
+                                <ul class="dropdown">
+                                    <li class="text-center">{{app.user.username}}</li>
+                                    <li class="text-center">{{saldo}}€</li>
+                                    <li><a href="{{ path('app_logout') }}">Cerrar sesion</a></li>
+                                </ul>
+                            </li>
+                            {% else %}
+                                <li class="active"><a href="{{ path('app_login')}}"><span class="icon_profile"></span></a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

@@ -4,11 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\CambiarContrasenaType;
+use App\Repository\ApuestaRepository;
+use App\Repository\MovimientosFinancierosRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,6 +37,7 @@ class UserController extends AbstractController
     public function new(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
+        $user->setRoles(['ROLE_USER']);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -60,7 +66,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_user_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository, ApuestaRepository $apuestaRepository, MovimientosFinancierosRepository $movimientosFinancierosRepository): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -74,6 +80,9 @@ class UserController extends AbstractController
         return $this->renderForm('user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+            'apuestas' => $apuestaRepository->findByUsuario($user->getId()),
+            'movimientos' => $movimientosFinancierosRepository->findByUsuario($user->getId()),
+            'saldo'=>$user->getSaldo()
         ]);
     }
 
@@ -87,5 +96,54 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/{id}/cambiarContrasena", name="app_cambiar_contrasena", methods={"GET", "POST"})
+     */
+    public function cambiarContrasena(Request $request, User $user, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        
+
+        $form = $this->createForm(CambiarContrasenaType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $contrasenas=$request->request->get('cambiar_contrasena');
+            if($valido=$userPasswordHasher->isPasswordValid($user, $contrasenas['contrasenaActual'])){
+                if($contrasenas['password']['first']===$contrasenas['password']['second']){
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                                $user,
+                                $contrasenas['password']['first']
+                            )
+                        );
+                        $userRepository->add($user, true);
+                    $this->addFlash(
+                        'success',
+                        'Contraseña cambiada correctamente!'
+                    ); 
+                    return $this->redirectToRoute('app_user_edit', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
+                }{
+                    $this->addFlash(
+                        'warning',
+                        'Las contraseñas no coinciden!!'
+                    ); 
+                }
+                
+            }
+            else{
+                $this->addFlash(
+                    'warning',
+                    'Contraseña actual erronea!'
+                );      
+            }                        
+        }
+
+        return $this->renderForm('user/cambiarContrasena.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+
     }
 }

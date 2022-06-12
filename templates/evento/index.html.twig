@@ -12,7 +12,7 @@
                     <div class="product__sidebar__view">
                         <div class="filter__gallery">
                             <div class="product__sidebar__view__item set-bg">
-                                <a href="{{ path('app_evento_combates', {'id': evento.id }) }}"><img src="../{{evento.imagen}}"></a>
+                                <a href="{{ path('app_evento_combates', {'id': evento.id }) }}"><img src="{{ asset('img/'~ evento.imagen )}}"></a>
                                 <div class="ep">
                                     {{evento.fecha|date("d/m/Y")}}
                                 </div>

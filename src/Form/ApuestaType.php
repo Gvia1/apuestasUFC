@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Apuesta;
+use App\Entity\Metodo;
+use App\Entity\MetodoEspecifico;
+use App\Entity\Peleador;
 use App\Entity\Peleadores;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -18,32 +22,36 @@ class ApuestaType extends AbstractType
     {
         $builder
             ->add('ganador', EntityType::class, [
-                'class' => Peleadores::class,
-                'choice_label' => 'nombre',
+                'class' => Peleador::class,
+                'choices' => $options['peleadores'],
+                'choice_label' => function (Peleador $peleador) {
+                    return $peleador->getNombre();
+                    },
+                'placeholder' => 'Seleccione',
                 ])
 
-            ->add('metodo', ChoiceType::class, [
-                'choices'  => [
-                    'KO' => 'KO',
-                    'TKO' => 'TKO',
-                    'Decision' => 'Decision',
-                ]
-            ])
             ->add('round',ChoiceType::class, [
+                'placeholder' => 'Seleccione',
                 'choices'  => [
-                    '1' => '1',
-                    '2' => '2',
-                    '3' => '3',
-                ]
-            ])
-            ->add('metodoEspecifico')
-            ->add('cantidad',MoneyType::class, [
-                'attr' => [
-                  'type' => 'number',
+                    range(0,$options['rounds'],1),
                 ],
-                'currency' => 'EUR',
-                'mapped' => false
+                'required' => false
+                
             ])
+            ->add('metodo', EntityType::class, [
+                'placeholder' => 'Seleccione',
+                'class' => Metodo::class,
+                'choice_label' => 'descripcion',
+                'required' => false
+
+                ])
+            ->add('metodoEspecifico', EntityType::class, [
+                'placeholder' => 'Seleccione',
+                'class' => MetodoEspecifico::class,
+                'choice_label' => 'descripcion',
+                'required' => false
+                ])
+            ->add('cantidad')
         ;
     }
 
@@ -51,6 +59,8 @@ class ApuestaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Apuesta::class,
+            'peleadores' => null,
+            'rounds' => null
         ]);
     }
 }

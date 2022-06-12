@@ -47,6 +47,11 @@ class Apuesta
      */
     private $round;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $cantidad;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class Apuesta
     public function setRound(?string $round): self
     {
         $this->round = $round;
+
+        return $this;
+    }
+
+    public function getCantidad(): ?string
+    {
+        return $this->cantidad;
+    }
+
+    public function setCantidad(string $cantidad): self
+    {
+        $this->cantidad = $cantidad;
 
         return $this;
     }

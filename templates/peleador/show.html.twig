@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Peleador{% endblock %}
+
+{% block body %}
+    <h1>Peleador</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ peleador.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ peleador.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Alias</th>
+                <td>{{ peleador.alias }}</td>
+            </tr>
+            <tr>
+                <th>Apellido</th>
+                <td>{{ peleador.apellido }}</td>
+            </tr>
+            <tr>
+                <th>Edad</th>
+                <td>{{ peleador.edad }}</td>
+            </tr>
+            <tr>
+                <th>Altura</th>
+                <td>{{ peleador.altura }}</td>
+            </tr>
+            <tr>
+                <th>Peso</th>
+                <td>{{ peleador.peso }}</td>
+            </tr>
+            <tr>
+                <th>Victorias</th>
+                <td>{{ peleador.victorias }}</td>
+            </tr>
+            <tr>
+                <th>Derrotas</th>
+                <td>{{ peleador.derrotas }}</td>
+            </tr>
+            <tr>
+                <th>Empates</th>
+                <td>{{ peleador.empates }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_peleador_index') }}">back to list</a>
+
+    <a href="{{ path('app_peleador_edit', {'id': peleador.id}) }}">edit</a>
+
+    {{ include('peleador/_delete_form.html.twig') }}
+{% endblock %}

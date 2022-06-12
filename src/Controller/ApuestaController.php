@@ -2,8 +2,15 @@
 
 namespace App\Controller;
 use App\Entity\Apuesta;
+use App\Entity\CombatePeleador;
+use App\Entity\MovimientosFinancieros;
+use App\Entity\Peleador;
 use App\Form\ApuestaType;
 use App\Repository\ApuestaRepository;
+use App\Repository\CombatePeleadorRepository;
+use App\Repository\CombateRepository;
+use App\Repository\PeleadorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,25 +32,61 @@ class ApuestaController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_apuesta_new", methods={"GET", "POST"})
+     * @Route("/new/{id}", name="app_apuesta_new", methods={"GET", "POST"},requirements={"id":"\d+"})
      */
-    public function new(Request $request, ApuestaRepository $apuestaRepository): Response
+    public function new(Request $request, ApuestaRepository $apuestaRepository, CombateRepository $combateRepository, CombatePeleadorRepository $combatePeleadorRepository, PeleadorRepository $peleadorRepository,EntityManagerInterface $em): Response
     {
-        $apuestum = new Apuesta();
-        
-        $form = $this->createForm(ApuestaType::class, $apuestum);
+        $apuesta = new Apuesta();
+        //Recoge el id del combate
+        $combateId=$request->attributes->get('id');
+        $peleadoresId=[];
+        //Hace la consulta para recoger la entidad del combate con ese id
+        $combate=$combateRepository->find($combateId);
+
+        //Recoge todos los peleadores de ese combate
+        $registrosCombate=$combatePeleadorRepository->findBy(['combate'=>$combate->getId()]);
+
+        foreach($registrosCombate as $registro){
+            $peleadoresId[]=$registro->getPeleador()->getId();
+        }
+
+        $peleadores=$peleadorRepository->findPeleadoresCombate($peleadoresId);
+        //recoge los rounds de ese combate
+        $rounds=$combate->getRounds();
+        //crea el formulario
+        $form = $this->createForm(ApuestaType::class, $apuesta, ['peleadores'=>$peleadores, 'rounds' =>$rounds]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $apuestaRepository->add($apuestum, true);
+        if ($form->isSubmitted()) {
+            $user=$this->getUser();
+            //Crea el movimiento
+            $movimiento=new MovimientosFinancieros;
+            $movimiento->setUsuario($user);
+            $movimiento->setImporte($apuesta->getCantidad()*-1);
+            $movimiento->setConcepto('Apuesta en el combate: '.$combate->getNombre());
 
-            return $this->redirectToRoute('app_apuesta_index', [], Response::HTTP_SEE_OTHER);
+            $apuesta->setCombate($combate);
+            $apuesta->setUsuario($user);
+            
+            $em->persist($apuesta);
+            $em->persist($movimiento);
+            $em->flush();
+
+            return $this->redirectToRoute('app_apuestas', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('apuesta/new.html.twig', [
-            'apuestum' => $apuestum,
+            'apuesta' => $apuesta,
             'form' => $form,
         ]);
+    }
+
+    /**
+     * @Route("/pruebas", name="app_pruebas", methods={"GET","POST"})
+     */
+    public function pruebas(ApuestaRepository $apuestaRepository): Response
+    {
+        dump($this->getUser());die();
     }
 
     /**
@@ -67,7 +110,7 @@ class ApuestaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $apuestaRepository->add($apuestum, true);
 
-            return $this->redirectToRoute('app_apuesta_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_apuesta_new', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('apuesta/edit.html.twig', [

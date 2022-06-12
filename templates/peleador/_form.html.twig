@@ -1,0 +1,102 @@
+{{ form_start(form)}}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
+    </section>
+    <br>
+    {{ form_start(form) }}
+        <div class="form-row">
+            <div class="col">
+                <label class="text-white">Nombre</label>
+                {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Alias</label>
+                {{ form_widget(form.alias, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Apellido</label>
+                {{ form_widget(form.apellido, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Division</label><br>
+                {{ form_widget(form.division, { 'attr': {'class': 'nice-select'} } )}}
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="col">
+                <label class="text-white">Edad</label>
+                {{ form_widget(form.edad, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Altura</label>
+                {{ form_widget(form.altura, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Peso</label>
+                {{ form_widget(form.peso, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Victorias</label>
+                {{ form_widget(form.victorias, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Derrotas</label>
+                {{ form_widget(form.derrotas, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+            <div class="col">
+                <label class="text-white">Empates</label>
+                {{ form_widget(form.empates, { 'attr': {'class': 'form-control'} } )}}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col col-lg-2">
+                <button type="submit" class="site-btn">Guardar Cambios</button>
+            </div>
+            <div class="col col-lg-2">
+                <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+            </div>
+        </br>
+    {{ form_end(form, {render_rest: false}) }}
+</div>
+<br>
+<div class='container'>
+    <table class="table bg-light">
+    <thead style="background-color:#e53637">
+    <tr>
+        <th scope="col">Id</th>
+        <th>Nombre</th>
+        <th>Alias</th>
+        <th>Division</th>
+        <th>Edad</th>
+        <th>Altura</th>
+        <th>Peso</th>
+        <th>Victorias</th>
+        <th >Derrotas</th>
+        <th>Empates</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for peleador in peleadores %}
+    <tr>
+        <th scope="row">{{peleador.id}}</th>
+        <td>{{peleador.nombre}}</td>
+        <td>{{peleador.alias}}</td>
+        <td>{{peleador.division.nombre}}</td>
+        <td>{{peleador.edad}}</td>
+        <td>{{peleador.altura}}</td>
+        <td>{{peleador.peso}}</td>
+        <td>{{peleador.victorias}}</td>
+        <td>{{peleador.derrotas}}</td>
+        <td>{{peleador.empates}}</td>
+        <td>
+            <button type="button" class="btn btn-success"><a class="text-white" href="{{ path('app_peleador_edit',{'id':peleador.id}) }}">Editar</a></button>
+            <button type="button" class="btn btn-danger"><a class="text-white" href="{{ path('app_peleador_delete',{'id':peleador.id}) }}">Borrar</a></button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>

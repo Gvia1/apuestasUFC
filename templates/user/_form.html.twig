@@ -1,4 +1,152 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/usuario.jpeg' )}}">
+    </section>
+    <div class="container">
+        <h3 class="text-white">Datos del usuario</h3>
+        {% include '_mensajes.html.twig' %}
+        {{ form_start(form) }}
+            <div class="form-row">
+                <div class ="col">
+                    <label class="text-white">Username</label>
+                    {{ form_widget(form.username, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class="col"><br>
+                    <button class="site-btn"><a class= " text-white"href="{{ path('app_cambiar_contrasena',{'id': user.id}) }}">Cambiar Contraseña</a></button>
+                </div>
+                <div class ="col"><br>
+                    <h2 class="text-white">Saldo: {{saldo}}€</h2>
+                </div>
+            </div>
+            <br>
+            <h3 class="text-white">Datos de contacto</h3>
+            <div class="form-row">
+                <div class ="col">
+                    <label class="text-white">Nombre</label>
+                    {{ form_widget(form.Nombre, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Apellidos</label>
+                    {{ form_widget(form.Apellidos, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class ="col">
+                    <label class="text-white">Direccion</label>
+                    {{ form_widget(form.Direccion, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Localidad</label>
+                    {{ form_widget(form.Localidad, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Email</label>
+                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Telefono</label>
+                    {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+            </div>
+            <br>
+            <h3 class="text-white">Datos bancarios</h3>
+            <div class="form-row">
+                <div class ="col">
+                    <label class="text-white">Entidad</label>
+                    {{ form_widget(form.entidad, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Oficina</label>
+                    {{ form_widget(form.oficina, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">DC</label>
+                    {{ form_widget(form.dc, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+                <div class ="col">
+                    <label class="text-white">Numero de cuenta</label>
+                    {{ form_widget(form.numero_cuenta, { 'attr': {'class': 'form-control'} } )}}
+                </div>
+            </div>
+            <br>
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <button type="submit" class="site-btn">Guardar Cambios</button>
+                </div>
+                <div class="col col-lg-2">
+                    <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+                </div>
+                <div class="col col-lg-2">
+                    {{ include('user/_delete_form.html.twig') }}
+                </div>
+            </div>
+        {{ form_end(form, {render_rest: false}) }}
+    </div>
+</div>   
+<br>
+<div class='container'>
+    <div class="row">
+        <div class="col-sm-8">
+        <h2 class="text-white">Apuestas</h2>
+            <table class="table bg-light">
+                <thead style="background-color:#e53637">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th>Combate</th>
+                        <th>Evento</th>
+                        <th>Ganador</th>
+                        <th>Round</th>
+                        <th>Metodo</th>
+                        <th>Metodo Especifico</th>
+                        <th>Cantidad(€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apuesta in apuestas %}
+                    <tr>
+                        <th scope="row">{{apuesta.id}}</th>
+                        <td>{{apuesta.combate.nombre}}</td>
+                        <td>{{apuesta.combate.evento.nombre}}</td>
+                        <td>{{apuesta.ganador.nombre}}</td>
+                        <td>{{apuesta.round}}</td>
+                        {% if apuesta.metodo is null %}
+                            <td></td>
+                        {% else %}
+                            <td>{{apuesta.metodo.descripcion}}</td>
+                        {% endif %}
+                        {% if apuesta.metodoEspecifico is null %}
+                            <td></td>
+                        {% else %}
+                        <td>{{apuesta.metodoEspecifico.descripcion}}</td>
+                        {% endif %}
+                        <td>{{apuesta.cantidad}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-4">
+        <h2 class="text-white">Movimientos</h2>
+            <table class="table bg-light">
+                <thead style="background-color:#e53637">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th>Concepto</th>
+                        <th>Importe(€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movimiento in movimientos %}
+                    <tr>
+                        <th scope="row">{{movimiento.id}}</th>
+                        <td>{{movimiento.concepto}}</td>
+                        <td>{{movimiento.importe}}€</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

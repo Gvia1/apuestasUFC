@@ -24,20 +24,22 @@ class Division
      */
     private $nombre;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Peleador::class, mappedBy="division")
-     */
-    private $campeon;
 
     /**
      * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="division")
      */
     private $combates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Peleador::class, mappedBy="division")
+     */
+    private $peleadores;
+
     public function __construct()
     {
         $this->campeon = new ArrayCollection();
         $this->combates = new ArrayCollection();
+        $this->peleadores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +113,36 @@ class Division
             // set the owning side to null (unless already changed)
             if ($combate->getDivision() === $this) {
                 $combate->setDivision(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Peleador>
+     */
+    public function getPeleadores(): Collection
+    {
+        return $this->peleadores;
+    }
+
+    public function addPeleadore(Peleador $peleadore): self
+    {
+        if (!$this->peleadores->contains($peleadore)) {
+            $this->peleadores[] = $peleadore;
+            $peleadore->setDivision($this);
+        }
+
+        return $this;
+    }
+
+    public function removePeleadore(Peleador $peleadore): self
+    {
+        if ($this->peleadores->removeElement($peleadore)) {
+            // set the owning side to null (unless already changed)
+            if ($peleadore->getDivision() === $this) {
+                $peleadore->setDivision(null);
             }
         }
 

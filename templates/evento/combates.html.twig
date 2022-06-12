@@ -13,7 +13,12 @@
     <br>
     {% for combate in combates %}
         <div class="row">
-            <h3 class="text-light">{{combate.nombre}} <a href="{{path('app_apuesta_new',{'id':combate.id})}}" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Apostar</a></h3> 
+        {% if app.user %}
+            <h3 class="text-light">{{combate.nombre}} <a href="{{path('app_apuesta_new', {'id': combate.id})}}" class="site-btn" role="button" aria-pressed="true">Apostar</a></h3> 
+        </li>
+        {% else %}
+            <h3 class="text-light">{{combate.nombre}} <a href="{{path('app_login')}}" class="site-btn" role="button" aria-pressed="true">Apostar</a></h3> 
+        {% endif %}
         </div>
         <br>
     {% endfor %}

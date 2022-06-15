@@ -3,7 +3,7 @@
     </section>
     <br>
     {{ form_start(form) }}
-    <h2>Crear Evento</h2>
+    <h2 class="text-white">Gestionar Eventos</h2>
         <div class="form-row">
             <div class ="col">
                 <label class="text-white">Nombre</label>
@@ -34,12 +34,12 @@
             <div class="col col-lg-2">
                 <button type="submit" class="site-btn">Guardar Cambios</button>
             </div>
+            {{ form_end(form, {render_rest: false}) }}
             <div class="col col-lg-2">
                 <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
             </div>
             <div class="col col-lg-2">
         </div>
-    {{ form_end(form, {render_rest: false}) }}
 </div>
 <br>
 <div class='container'>

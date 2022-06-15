@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit MovimientosFinancieros{% endblock %}
+
+{% block body %}
+    <h1>Edit MovimientosFinancieros</h1>
+
+    {{ include('movimientos_financieros/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_movimientos_financieros_index') }}">back to list</a>
+
+    {{ include('movimientos_financieros/_delete_form.html.twig') }}
+{% endblock %}

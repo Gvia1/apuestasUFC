@@ -37,9 +37,9 @@
                     <div class="col col-lg-2">
                         <button type="submit" class="site-btn">Cambiar contraseña</button>
                     </div>
+        {{ form_end(form, {render_rest: false}) }}
                     <div class="col col-lg-2">
-                        <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
+                        <button class="site-btn"><a class= " text-white"href="{{ path('app_user_edit',{'id':app.user.id}) }}">Volver atrás</a></button>
                     </div>
                     <div class="col col-lg-2">
-        {{ form_end(form, {render_rest: false}) }}
 {% endblock %}

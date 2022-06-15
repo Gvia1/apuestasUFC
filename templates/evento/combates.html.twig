@@ -12,15 +12,62 @@
     </section>
     <br>
     {% for combate in combates %}
-        <div class="row">
-        {% if app.user %}
-            <h3 class="text-light">{{combate.nombre}} <a href="{{path('app_apuesta_new', {'id': combate.id})}}" class="site-btn" role="button" aria-pressed="true">Apostar</a></h3> 
-        </li>
-        {% else %}
-            <h3 class="text-light">{{combate.nombre}} <a href="{{path('app_login')}}" class="site-btn" role="button" aria-pressed="true">Apostar</a></h3> 
-        {% endif %}
+        <div class="row justify-content-center">
+            <div class="row">
+                <h3 class="text-light">{{combate.nombre}}</h3><br><br>
+            </div>
+            <div class="row">
+                <div class ="col">
+                </div>
+                <div class ="col">
+                    {% if app.user %}
+                         {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                        <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_apuesta_new', {'id': combate.id})}}">Apostar</a></button>
+                        {% else %}
+                            <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</button>
+                        {% endif %}
+                    {% else %}
+                        {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                            <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_login')}} ">Apostar</a></button>
+                        {% else %}
+                            <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</a></button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class ="col">
+                    <button type="button" class="site-btn" style ="background-color:white"><a style= "color:black" href="{{path('app_combate_detalles',{'id':combate.id})}}">Detalles</a></button>
+                </div>
+                <div class ="col">
+                </div>
+            </div>
         </div>
-        <br>
     {% endfor %}
 </div>
 {% endblock %}
+ {# <div class="form-row">
+            <h3 class="text-light">{{combate.nombre}}</h3><br><br>
+            </div>
+            <div class="form-row">
+                <div class ="col">
+                </div>
+                <div class ="col">
+                {% if app.user %}
+                    {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                        <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_apuesta_new', {'id': combate.id})}}">Apostar</a></button>
+                    {% else %}
+                        <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</button>
+                    {% endif %}
+                {% else %}
+                    {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                        <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_login')}} ">Apostar</a></button>
+                    {% else %}
+                        <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</a></button>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <div class ="col">
+                    <button type="button" class="site-btn" style ="background-color:white; color:black">Detalles</button>
+                </div>
+                <div class ="col">
+                </div>
+            </div>   #}

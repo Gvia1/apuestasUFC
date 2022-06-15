@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pruebas{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
+    </section>
+    {% include '_mensajes.html.twig' %}
+    <div class="form-row">
+        <div class ="col">
+            <label class="text-white">Pagar Apuestas</label><br>
+            <button class="site-btn"><a class= "text-white"href="{{ path('app_pagar_apuestas') }}">Pagar Apuestas</a></button>
+
+        </div>
+        <div class="col"><br>
+        </div>
+        <div class ="col"><br>
+        </div>
+    </div>
+</div>
+{% endblock %}

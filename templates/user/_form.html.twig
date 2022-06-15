@@ -8,13 +8,15 @@
             <div class="form-row">
                 <div class ="col">
                     <label class="text-white">Username</label>
-                    {{ form_widget(form.username, { 'attr': {'class': 'form-control'} } )}}
+                    {{ form_widget(form.username, { 'attr': {'class': 'form-control'} } )}}<br>
+                    <button class="site-btn"><a class= "text-white"href="{{ path('app_cambiar_contrasena',{'id': user.id}) }}">Cambiar Contraseña</a></button>
+
                 </div>
                 <div class="col"><br>
-                    <button class="site-btn"><a class= " text-white"href="{{ path('app_cambiar_contrasena',{'id': user.id}) }}">Cambiar Contraseña</a></button>
                 </div>
                 <div class ="col"><br>
-                    <h2 class="text-white">Saldo: {{saldo}}€</h2>
+                    <h2 class="text-white">Saldo: {{saldo}}€</h2><br>
+                    <button class="site-btn"><a class= "text-white"href="{{ path('app_movimientos_financieros_new') }}">Realizar ingreso </a></button>
                 </div>
             </div>
             <br>

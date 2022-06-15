@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalles del combate{% endblock %}
+
+{% block body %}
+<div class="container">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/'~ evento.imagen ) }}">
+    </section>
+    <br>
+    <div class="row justify-content-center">
+            <h3 class="text-light">Combate del peso {{combate.division.nombre}}</h3><br><br>
+            </div>
+    <div class="row">
+        {% for peleador in peleadores %}
+        <div class="col">
+            {% if peleador == favorito %}
+            <div class="card text-white bg-warning" style="max-width: 18rem;">
+            {% else %}
+            <div class="card text-white bg-danger" style="max-width: 18rem;">
+            {% endif %}
+            <div class="card-header">{{peleador.nombre}} {{peleador.apellido}}</div>
+            <div class="card-body">
+                <h5 class="card-title">{{peleador.alias}}</h5>
+                <ul style="list-style-type: none;">
+                    <li>Altura: {{peleador.altura}}</li>
+                    <li>Peso: {{peleador.peso}}</li>
+                    <li>Victorias: {{peleador.victorias}}</li>
+                    <li>Derrotas: {{peleador.derrotas}}</li>
+                    <li>Empates: {{peleador.empates}}</li>
+                    <li> </li>
+                    {% if peleador.id == resultado.peleador.id %}
+                    <li>VICTORIA por {{resultado.metodo.descripcion}}</li>
+                    {% else %}
+                    <li>DERROTA por {{resultado.metodo.descripcion}}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br><br>
+    <div class="row justify-content-center">
+        <div class ="col">
+        </div>
+        <div class ="col">
+        </div>
+        <div class ="col">
+            {% if app.user %}
+                    {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_apuesta_new', {'id': combate.id})}}">Apostar</a></button>
+                {% else %}
+                    <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</button>
+                {% endif %}
+            {% else %}
+                {% if evento.fecha|date('Y/m/d') > 'now'|date('Y/m/d') %}
+                    <button type="button" class="site-btn" ><a class= "text-white" href="{{path('app_login')}} ">Apostar</a></button>
+                {% else %}
+                    <button type="button" class="site-btn" style="background-color:grey" disabled>Apostar</a></button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class ="col">
+            <button type="button" class="site-btn" style ="background-color:white"><a style= "color:black" href="{{ path('app_evento_combates', {'id': evento.id }) }}">Volver</a></button>
+        </div>
+        <div class ="col">
+        </div>
+        <div class ="col">
+        </div>
+    </div>
+</div>
+{% endblock %}

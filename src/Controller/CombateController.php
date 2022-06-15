@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Apuesta;
 use App\Entity\Combate;
 use App\Entity\CombatePeleador;
+use App\Form\ApuestaType;
 use App\Form\CombatePeleadorType;
 use App\Form\CombateType;
 use App\Repository\CombatePeleadorRepository;
 use App\Repository\CombateRepository;
 use App\Repository\PeleadorRepository;
+use App\Service\PagarApuestas;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,6 +83,92 @@ class CombateController extends AbstractController
     {
         return $this->render('combate/show.html.twig', [
             'combate' => $combate,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/detalles", name="app_combate_detalles", methods={"GET","POST"})
+     */
+    public function detalles(Combate $combate, CombatePeleadorRepository $combatePeleadorRepository, Request $request, EntityManagerInterface $em, PagarApuestas $srv): Response
+    {
+        $registrosCombate=$combatePeleadorRepository->findBy(['combate'=>$combate->getId()]);
+        foreach($registrosCombate as $registro){
+            $peleadores[]=$registro->getPeleador();
+            if($registro->isGanador() === true){
+                $resultado=$registro;
+            }
+        }
+        $favorito=$srv->calcularFavorito($registrosCombate);
+
+        return $this->renderForm('combate/detalles.html.twig', [
+            'peleadores'=>$peleadores,
+            'combate' => $combate,
+            'evento'=>$combate->getEvento(),
+            'favorito'=>$favorito,
+            'resultado'=>$resultado
+
+        ]);
+
+    }
+
+    /**
+     * @Route("/{id}/ganador", name="app_combate_ganador", methods={"GET","POST"})
+     */
+    public function ganador(Combate $combate, CombatePeleadorRepository $combatePeleadorRepository, Request $request,CombateRepository $combateRepository, PeleadorRepository $peleadorRepository, EntityManagerInterface $em): Response
+    {
+
+        $registrosCombate=$combatePeleadorRepository->findBy(['combate'=>$combate->getId()]);
+
+        foreach($registrosCombate as $registro){
+            $peleadores[]=$registro->getPeleador();
+        }
+        $resultado=new Apuesta;
+        $rounds=$combate->getRounds();
+        $form = $this->createForm(ApuestaType::class, $resultado, ['peleadores'=>$peleadores, 'rounds' =>$rounds]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            foreach($registrosCombate as $registro){
+                if($registro->getPeleador()===$resultado->getGanador()){
+                    $registro->setGanador(true);
+                    $registro->getPeleador()->setVictorias($registro->getPeleador()->getVictorias()+1);
+
+                    if($resultado->getRound() !== null){
+                        $registro->setRound($resultado->getRound());
+                    }
+                    if($resultado->getMetodo() !== null){
+                        $registro->setMetodo($resultado->getMetodo());
+                    }
+                    if($resultado->getMetodoEspecifico() !== null){
+                        $registro->setMetodoEspecifico($resultado->getMetodoEspecifico());
+                    }
+                    $em->persist($registro);
+                }
+                else{
+                    $registro->setGanador(false);
+                    $registro->getPeleador()->setDerrotas($registro->getPeleador()->getDerrotas()+1);
+                    if($resultado->getRound() !== null){
+                        $registro->setRound($resultado->getRound());
+                    }
+                    if($resultado->getMetodo() !== null){
+                        $registro->setMetodo($resultado->getMetodo());
+                    }
+                    if($resultado->getMetodoEspecifico() !== null){
+                        $registro->setMetodoEspecifico($resultado->getMetodoEspecifico());
+                    }
+                    $em->persist($registro);
+
+                }
+            }
+            
+            $em->flush();
+
+            return $this->redirectToRoute('app_combate_new', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('combate/ganador.html.twig', [
+            'resultado' => $resultado,
+            'form' => $form,
         ]);
     }
 

@@ -39,6 +39,15 @@ class CombateRepository extends ServiceEntityRepository
         }
     }
 
+    public function findCombatesEventos($eventos){
+        $qb=$this->createQueryBuilder('c');
+        $qb->select('c')
+        ->where('c IN (:eventos)')
+        ->setParameter('eventos', $eventos)
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Combate[] Returns an array of Combate objects
 //     */

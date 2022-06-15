@@ -40,7 +40,7 @@ class Evento
     private $imagen;
 
     /**
-     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="evento")
+     * @ORM\OneToMany(targetEntity=Combate::class, mappedBy="evento", orphanRemoval=true)
      */
     private $combates;
 

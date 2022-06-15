@@ -3,6 +3,7 @@
     <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
     </section>
     <br>
+    <h2 class="text-white">Gestionar Combates</h2>
     {{ form_start(form) }}
         <div class="form-row">
             <div class="col">
@@ -51,11 +52,11 @@
             <div class="col col-lg-2">
                 <button type="submit" class="site-btn">Guardar Cambios</button>
             </div>
+    {{ form_end(form, {render_rest: false}) }}
             <div class="col col-lg-2">
                 <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
             </div>
         </br>
-    {{ form_end(form, {render_rest: false}) }}
 </div>
 <br>
 <div class='container'>
@@ -67,20 +68,32 @@
         <th scope="col">Division</th>
         <th scope="col">Rounds</th>
         <th scope="col">Evento</th>
+        <th scope="col">Ganador</th>
         <th scope="col">Acciones</th>
     </tr>
     </thead>
     <tbody>
     {% for combate in combates %}
     <tr>
+        {% set ganador %}
+        {% endset %}
         <th scope="row">{{combate.id}}</th>
         <td>{{combate.nombre}}</td>
         <td>{{combate.division.nombre}}</td>
         <td>{{combate.rounds}}</td>
         <td>{{combate.evento.nombre}}</td>
+        {% for peleador in combate.peleadores %}
+            {% if peleador.ganador == true %}
+            {% set ganador = peleador.peleador.nombre %}
+            {% elseif peleador.ganador is null %}
+            {% set ganador = 'No hay ganador'%}
+            {% endif %}
+        {% endfor %}
+        <td>{{ganador}}</td>
         <td>
             <button type="button" class="btn btn-success"><a class="text-white" href="{{ path('app_combate_edit',{'id':combate.id}) }}">Editar</a></button>
             <button type="button" class="btn btn-danger"><a class="text-white" href="{{ path('app_combate_delete',{'id':combate.id}) }}">Borrar</a></button>
+            <button type="button" class="btn btn-warning"><a class="text-white" href="{{ path('app_combate_ganador',{'id':combate.id}) }}">Ganador</a></button>
         </td>
     </tr>
     {% endfor %}

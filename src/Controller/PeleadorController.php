@@ -79,7 +79,7 @@ class PeleadorController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="app_peleador_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_peleador_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, Peleador $peleador, PeleadorRepository $peleadorRepository): Response
     {

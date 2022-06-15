@@ -1,3 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Definir Ganador{% endblock %}
+
+{% block body %}
 <div class="container">
     <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/apuesta.jpg' )}}">
     </section>
@@ -33,26 +38,18 @@
             </div>
             <br>
             <div class="row justify-content-center">
-                <h3 class='text-white'>Cantidad(€)</h3>
-            </div>
-            <div class="row justify-content-center">
-                <div class ="col-auto">
-                    {{ form_widget(form.cantidad, { 'attr': {'class': 'form-control'}} )}}
-                </div>
-            </div>
-            <br>
-            <div class="row justify-content-center">
                 <div class="form-row">
                     <div class ="col">
                     </div>
                     <div class ="col">
-                        <button type="submit" class="site-btn">Realizar Apuesta</button>
-                    </div>
-                    {{ form_end(form, {render_rest: false}) }}
-                    <div class ="col">
                         <button class="site-btn"><a class= "text-white"href="{{ path('app_apuestas') }}">Ir al Inicio</a></button>
+                    </div>
+                    <div class ="col">
+                        <button type="submit" class="site-btn">Guardar cambios</button>
                     </div>
                     <div class ="col">
                     </div>
                 </div>           
             </div>
+    {{ form_end(form, {render_rest: false}) }}
+{% endblock %}

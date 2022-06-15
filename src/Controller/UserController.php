@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\MovimientosFinancieros;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\CambiarContrasenaType;
+use App\Form\MovimientosFinancierosType;
 use App\Repository\ApuestaRepository;
 use App\Repository\MovimientosFinancierosRepository;
 use App\Repository\UserRepository;
@@ -71,10 +73,10 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $userRepository->add($user, true);
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_edit', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/edit.html.twig', [
@@ -95,7 +97,7 @@ class UserController extends AbstractController
             $userRepository->remove($user, true);
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_apuestas', [], Response::HTTP_SEE_OTHER);
     }
 
     /**
@@ -110,7 +112,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted()) {
             $contrasenas=$request->request->get('cambiar_contrasena');
-            if($valido=$userPasswordHasher->isPasswordValid($user, $contrasenas['contrasenaActual'])){
+            if($userPasswordHasher->isPasswordValid($user, $contrasenas['contrasenaActual'])){
                 if($contrasenas['password']['first']===$contrasenas['password']['second']){
                     $user->setPassword(
                         $userPasswordHasher->hashPassword(

@@ -1,8 +1,9 @@
 {{ form_start(form)}}
 <div class="container">
-    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/combate.png' )}}">
+    <section class="normal-breadcrumb set-bg" data-setbg="{{ asset('img/division.jpg' )}}">
     </section>
     <br>
+    <h2 class="text-white">Gestionar Divisiones</h2>
     {{ form_start(form) }}
         <div class="form-row">
             <div class="col">
@@ -21,11 +22,11 @@
             <div class="col col-lg-2">
                 <button type="submit" class="site-btn">Guardar Cambios</button>
             </div>
+            {{ form_end(form, {render_rest: false}) }}
             <div class="col col-lg-2">
                 <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
             </div>
         </br>
-    {{ form_end(form, {render_rest: false}) }}
 </div>
 <br>
 <div class='container'>

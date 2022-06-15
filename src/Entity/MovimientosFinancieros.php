@@ -17,10 +17,6 @@ class MovimientosFinancieros
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $Importe;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -33,21 +29,14 @@ class MovimientosFinancieros
      */
     private $usuario;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $importe;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getImporte(): ?int
-    {
-        return $this->Importe;
-    }
-
-    public function setImporte(int $Importe): self
-    {
-        $this->Importe = $Importe;
-
-        return $this;
     }
 
     public function getConcepto(): ?string
@@ -70,6 +59,18 @@ class MovimientosFinancieros
     public function setUsuario(?user $usuario): self
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function getImporte(): ?string
+    {
+        return $this->importe;
+    }
+
+    public function setImporte(string $importe): self
+    {
+        $this->importe = $importe;
 
         return $this;
     }

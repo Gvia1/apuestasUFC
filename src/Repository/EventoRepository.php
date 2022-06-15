@@ -42,8 +42,19 @@ class EventoRepository extends ServiceEntityRepository
     public function findUltimosEventos(){
         $qb=$this->createQueryBuilder('e');
         $qb->select('e')
-        ->orderBy('e.id','DESC')
+        ->orderBy('e.fecha','DESC')
         ->setMaxResults(3)
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findEventosApuestas(\Datetime $fechaFin, \DateTime $fechaInicio){
+        $qb=$this->createQueryBuilder('e');
+        $qb->select('e')
+        ->where('e.fecha < :fechaFin')
+        ->andWhere('e.fecha > :fechaInicio')
+        ->setParameter('fechaFin',$fechaFin)
+        ->setParameter('fechaInicio',$fechaInicio)
         ;
         return $qb->getQuery()->getResult();
     }

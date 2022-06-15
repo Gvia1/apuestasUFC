@@ -10,6 +10,7 @@ use App\Repository\ApuestaRepository;
 use App\Repository\CombatePeleadorRepository;
 use App\Repository\CombateRepository;
 use App\Repository\PeleadorRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,6 +68,8 @@ class ApuestaController extends AbstractController
 
             $apuesta->setCombate($combate);
             $apuesta->setUsuario($user);
+            $apuesta->setCobrada(false);
+            $apuesta->setFechaCreacion(new DateTime());
             
             $em->persist($apuesta);
             $em->persist($movimiento);

@@ -226,25 +226,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getMovimientosFinancieros(): Collection
     {
-        return $this->movimientosFinancieros;
+        return $this->movimientos;
     }
 
-    public function addMovimientosFinanciero(MovimientosFinancieros $movimientosFinanciero): self
+    public function addMovimientosFinanciero(MovimientosFinancieros $movimientos): self
     {
-        if (!$this->movimientosFinancieros->contains($movimientosFinanciero)) {
-            $this->movimientosFinancieros[] = $movimientosFinanciero;
-            $movimientosFinanciero->setUsuario($this);
+        if (!$this->movimientos->contains($movimientos)) {
+            $this->movimientos[] = $movimientos;
+            $movimientos->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeMovimientosFinanciero(MovimientosFinancieros $movimientosFinanciero): self
+    public function removeMovimientosFinanciero(MovimientosFinancieros $movimientos): self
     {
-        if ($this->movimientosFinancieros->removeElement($movimientosFinanciero)) {
+        if ($this->movimientos->removeElement($movimientos)) {
             // set the owning side to null (unless already changed)
-            if ($movimientosFinanciero->getUsuario() === $this) {
-                $movimientosFinanciero->setUsuario(null);
+            if ($movimientos->getUsuario() === $this) {
+                $movimientos->setUsuario(null);
             }
         }
 

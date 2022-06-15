@@ -52,6 +52,16 @@ class Apuesta
      */
     private $cantidad;
 
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    private $cobrada;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true))
+     */
+    private $fechaCreacion;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +147,30 @@ class Apuesta
     public function setCantidad(string $cantidad): self
     {
         $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    public function isCobrada(): ?bool
+    {
+        return $this->cobrada;
+    }
+
+    public function setCobrada(bool $cobrada): self
+    {
+        $this->cobrada = $cobrada;
+
+        return $this;
+    }
+
+    public function getFechaCreacion(): ?\DateTimeInterface
+    {
+        return $this->fechaCreacion;
+    }
+
+    public function setFechaCreacion(\DateTimeInterface $fechaCreacion): self
+    {
+        $this->fechaCreacion = $fechaCreacion;
 
         return $this;
     }

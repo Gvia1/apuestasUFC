@@ -37,7 +37,12 @@ class PeleadorController extends AbstractController
         if ($form->isSubmitted()) {
             $peleadorRepository->add($peleador, true);
 
-            return $this->redirectToRoute('app_peleador_new', ['peleadores' => $peleadorRepository->findAll(),], Response::HTTP_SEE_OTHER);
+            $this->addFlash(
+                'success',
+                'Peleador creado correctamente!'
+            );
+
+            return $this->redirectToRoute('app_peleador_new', ['peleadores' => $peleadorRepository->findAll()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('peleador/new.html.twig', [
@@ -68,6 +73,11 @@ class PeleadorController extends AbstractController
         if ($form->isSubmitted()) {
             $peleadorRepository->add($peleador, true);
 
+            $this->addFlash(
+                'success',
+                'Evento editado correctamente!'
+            );
+
             return $this->redirectToRoute('app_peleador_new', ['peleadores' => $peleadorRepository->findAll(),], Response::HTTP_SEE_OTHER);
         }
 
@@ -84,6 +94,11 @@ class PeleadorController extends AbstractController
     public function delete(Request $request, Peleador $peleador, PeleadorRepository $peleadorRepository): Response
     {
             $peleadorRepository->remove($peleador, true);
+
+            $this->addFlash(
+                'success',
+                'Peleador borrado correctamente!'
+            );
 
         return $this->redirectToRoute('app_peleador_new', ['peleadores' => $peleadorRepository->findAll(),], Response::HTTP_SEE_OTHER);
     }

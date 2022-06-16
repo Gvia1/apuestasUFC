@@ -81,7 +81,7 @@
                     <button class="site-btn"><a class= " text-white"href="{{ path('app_apuestas') }}">Volver al inicio</a></button>
                 </div>
                 <div class="col col-lg-2">
-                    {{ include('user/_delete_form.html.twig') }}
+                    <button class="site-btn"><a class= " text-white"href="{{ path('app_user_delete',{'id':app.user.id}) }}">Borrar Usuario</a></button>
                 </div>
             </div>
         {{ form_end(form, {render_rest: false}) }}
@@ -107,7 +107,11 @@
                 </thead>
                 <tbody>
                     {% for apuesta in apuestas %}
+                    {% if apuesta.cobrada == true %}
+                    <tr style="background-color:gold">
+                    {% else %}
                     <tr>
+                    {% endif %}
                         <th scope="row">{{apuesta.id}}</th>
                         <td>{{apuesta.combate.nombre}}</td>
                         <td>{{apuesta.combate.evento.nombre}}</td>

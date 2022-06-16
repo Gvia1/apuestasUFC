@@ -16,7 +16,9 @@ class CombateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nombre')
+            ->add('nombre',null,[
+                'required' => false,
+            ])
             ->add('evento', EntityType::class, [
                 'placeholder' => 'Seleccione',
                 'class' => Evento::class,

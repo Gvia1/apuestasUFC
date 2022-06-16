@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
  * @Route("/user")
@@ -89,15 +90,17 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_user_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_user_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
-        }
 
-        return $this->redirectToRoute('app_apuestas', [], Response::HTTP_SEE_OTHER);
+            $session = $this->get('session');
+          $session = new Session();
+          $session->invalidate();
+          
+        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
     }
 
     /**

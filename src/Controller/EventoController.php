@@ -44,6 +44,10 @@ class EventoController extends AbstractController
             $entityManager->persist($evento);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                'Evento creado correctamente!'
+            );
             return $this->redirectToRoute('app_evento_new', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -72,10 +76,15 @@ class EventoController extends AbstractController
         $form = $this->createForm(EventoType::class, $evento);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            $entityManager->persist($evento);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_evento_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash(
+                'success',
+                'Evento editado correctamente!'
+            );
+            return $this->redirectToRoute('app_evento_new', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('evento/edit.html.twig', [
@@ -92,6 +101,11 @@ class EventoController extends AbstractController
     {
             $entityManager->remove($evento);
             $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Evento borrado correctamente!'
+            );
 
         return $this->redirectToRoute('app_evento_new', ['eventos' => $entityManager->getRepository(Evento::class)->findAll()], Response::HTTP_SEE_OTHER);
     }

@@ -64,6 +64,11 @@ class CombateController extends AbstractController
             $combatePeleador->setPeleador($peleador2);
             $em->persist($combatePeleador);
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Combate creado correctamente!'
+            );
             
             return $this->redirectToRoute('app_combate_new', [], Response::HTTP_SEE_OTHER);
         }
@@ -175,33 +180,43 @@ class CombateController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_combate_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Combate $combate, CombateRepository $combateRepository,PeleadorRepository $peleadorRepository, EntityManagerInterface $em): Response
+    public function edit(Request $request, Combate $combate, CombateRepository $combateRepository,PeleadorRepository $peleadorRepository, EntityManagerInterface $em, CombatePeleadorRepository $combatePeleadorRepository): Response
     {
         $form = $this->createForm(CombateType::class, $combate);
-        $form->handleRequest($request);
+        
+        $registrosCombate=$combatePeleadorRepository->findBy(['combate'=>$combate->getId()]);
 
         $formPeleadores=$this->createForm(CombatePeleadorType::class, new CombatePeleador);
 
-        if ($form->isSubmitted()) {
+        foreach($registrosCombate as $registro){
+            $peleadores[]=$peleador1=$peleadorRepository->findOneById($registro->getPeleador()->getId());
+        }
+
+        $formPeleadores->handleRequest($request);
+        if ($formPeleadores->isSubmitted()) {
+
             $peleadoresId[]=$request->request->get('combate_peleador');
             $peleador1=$peleadorRepository->findOneById($peleadoresId[0]['peleador']);
             $peleador2=$peleadorRepository->findOneById($peleadoresId[0]['peleador2']);
 
+            if($peleadores[0]!== $peleador1){
+                $registrosCombate[0]->setPeleador($peleador1);
+            }
+            if($peleadores[1]!== $peleador2){
+                $registrosCombate[1]->setPeleador($peleador2);
+            }
+
             $combate->setNombre($peleador1->__toString().' Vs '.$peleador2->__toString());
             $em->persist($combate);
+            $em->persist($registrosCombate[0]);
+            $em->persist($registrosCombate[1]);
+
             $em->flush();
 
-            $combatePeleador=new CombatePeleador;
-            $combatePeleador->setCombate($combate);
-            $combatePeleador->setPeleador($peleador1);
-            $em->persist($combatePeleador);
-            $em->flush();
-
-            $combatePeleador=new CombatePeleador;
-            $combatePeleador->setCombate($combate);
-            $combatePeleador->setPeleador($peleador2);
-            $em->persist($combatePeleador);
-            $em->flush();
+            $this->addFlash(
+                'success',
+                'Combate editado correctamente!'
+            );
 
             return $this->redirectToRoute('app_combate_new', ['combates' => $combateRepository->findAll()], Response::HTTP_SEE_OTHER);
         }

@@ -36,7 +36,11 @@ class DivisionController extends AbstractController
 
         if ($form->isSubmitted()) {
             $divisionRepository->add($division, true);
-
+            
+            $this->addFlash(
+                'success',
+                'División creada correctamente!'
+            );
             return $this->redirectToRoute('app_division_new', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -68,7 +72,12 @@ class DivisionController extends AbstractController
         if ($form->isSubmitted()) {
             $divisionRepository->add($division, true);
 
-            return $this->redirectToRoute('app_division_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash(
+                'success',
+                'División editada correctamente!'
+            );
+
+            return $this->redirectToRoute('app_division_new', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('division/edit.html.twig', [
@@ -79,11 +88,16 @@ class DivisionController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="app_division_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_division_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, Division $division, DivisionRepository $divisionRepository): Response
     {
             $divisionRepository->remove($division, true);
+            
+            $this->addFlash(
+                'success',
+                'División borrada correctamente!'
+            );
 
         return $this->redirectToRoute('app_division_new', ['divisiones' => $divisionRepository->findAll(),], Response::HTTP_SEE_OTHER);
     }

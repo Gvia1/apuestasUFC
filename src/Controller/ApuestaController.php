@@ -61,21 +61,34 @@ class ApuestaController extends AbstractController
         if ($form->isSubmitted()) {
             $user=$this->getUser();
             //Crea el movimiento
-            $movimiento=new MovimientosFinancieros;
-            $movimiento->setUsuario($user);
-            $movimiento->setImporte($apuesta->getCantidad()*-1);
-            $movimiento->setConcepto('Apuesta en el combate: '.$combate->getNombre());
+            if($apuesta->getCantidad() <= $user->getSaldo()){
+                $movimiento=new MovimientosFinancieros;
+                $movimiento->setUsuario($user);
+                $movimiento->setImporte($apuesta->getCantidad()*-1);
+                $movimiento->setConcepto('Apuesta en el combate: '.$combate->getNombre());
 
-            $apuesta->setCombate($combate);
-            $apuesta->setUsuario($user);
-            $apuesta->setCobrada(false);
-            $apuesta->setFechaCreacion(new DateTime());
+                $apuesta->setCombate($combate);
+                $apuesta->setUsuario($user);
+                $apuesta->setCobrada(false);
+                $apuesta->setFechaCreacion(new DateTime());
+                
+                $em->persist($apuesta);
+                $em->persist($movimiento);
+                $em->flush();
+
+                return $this->redirectToRoute('app_evento_combates', ['id' =>$combate->getEvento()->getId()], Response::HTTP_SEE_OTHER);
+            }
+            else{
+                $this->addFlash(
+                    'warning',
+                    'Saldo insuficiente!'
+                );
+                return $this->renderForm('apuesta/new.html.twig', [
+                    'apuesta' => $apuesta,
+                    'form' => $form,
+                ]);
+            }
             
-            $em->persist($apuesta);
-            $em->persist($movimiento);
-            $em->flush();
-
-            return $this->redirectToRoute('app_apuestas', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('apuesta/new.html.twig', [
